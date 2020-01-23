@@ -13,7 +13,7 @@ export class ContactListComponent implements OnInit {
       'Bro. Huntington',
       'bh@byui.edu',
       '209-345-1234',
-      'http://www.minneapolisheadshots.com/gallery/main/professionalbusinessheadshot.jpg', 
+      'http://www.minneapolisheadshots.com/gallery/main/professionalbusinessheadshot.jpg',
       null,
       ),
     new Contact(
@@ -24,7 +24,7 @@ export class ContactListComponent implements OnInit {
       'https://web.byui.edu/Directory/Employee/barzeer.jpg',
       null
     )
-  ]
+  ];
 
   @Output() contactSelected = new EventEmitter<Contact>();
 

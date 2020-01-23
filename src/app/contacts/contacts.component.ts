@@ -12,6 +12,7 @@ export class ContactsComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    console.log('Contact component!');
   }
 
   onSelectContact(contact: Contact) {
