@@ -1,4 +1,4 @@
-<cms-header (featureSelected)="viewFeature($event)"></cms-header>
+<cms-header (featureSelected)="switchView($event)"></cms-header>
 <cms-documents *ngIf="selectedFeature === 'documents'"></cms-documents>
-<cms-messages-list *ngIf="selectedFeature === 'messages'"></cms-messages-list>
+<cms-message-list *ngIf="selectedFeature === 'messages'"></cms-message-list>
 <cms-contacts *ngIf="selectedFeature === 'contacts'"></cms-contacts>

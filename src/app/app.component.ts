@@ -9,7 +9,7 @@ export class AppComponent {
   title = 'cms';
   selectedFeature = 'documents';
 
-  viewFeature(feature: string) {
+  switchView(feature: string) {
     this.selectedFeature = feature;
   }
 }
