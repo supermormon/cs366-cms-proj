@@ -1,15 +1,19 @@
 <div class="container">
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-1"></div>
+    <div class="col-md-5">
       <div class="panel panel-default">
         <div class="panel-heading">
           <h4>Messages</h4>
         </div>
         <div class="panel-body">
-          <cms-message-item></cms-message-item>
+          <cms-message-item
+          *ngFor="let ElMessage of messages"
+          [message]="ElMessage"
+          ></cms-message-item>
         </div>
         <div class="panel-footer">
-          <cms-message-edit></cms-message-edit>
+          <cms-message-edit (messageSendEvent)="onSendMessage($event)"></cms-message-edit>
         </div>
       </div>
     </div>
