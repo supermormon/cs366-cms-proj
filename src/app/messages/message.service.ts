@@ -6,7 +6,7 @@ import { MOCKMESSAGES } from './MOCKMESSAGES';
   providedIn: 'root'
 })
 export class MessageService {
-  messageSent = new EventEmitter<Message>();
+  messageSent = new EventEmitter<Message[]>();
   messages: Message[] = [];
 
   constructor() { 
@@ -23,5 +23,10 @@ export class MessageService {
 
   getMessages(): Message[] {
     return this.messages.slice();
+  }
+
+  addMessage(message: Message) {
+    this.messages.push(message);
+    this.messageSent.emit(this.messages.slice());
   }
 }

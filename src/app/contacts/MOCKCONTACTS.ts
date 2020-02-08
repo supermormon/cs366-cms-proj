@@ -277,5 +277,13 @@ export const MOCKCONTACTS: Contact[] = [
       group: null
     }
   ]
-  }
+  },
+  {
+    contactId: '19',
+    name: 'John Reiley',
+    email: 'rei15006@byui.edu',
+    phone: 'none yo business',
+    imageUrl: '',
+    group: null
+  },
 ];

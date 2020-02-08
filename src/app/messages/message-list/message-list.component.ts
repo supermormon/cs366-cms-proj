@@ -10,11 +10,16 @@ import { MessageService } from '../message.service';
 export class MessageListComponent implements OnInit {
   messages: Message[] = [];
 
-  constructor(private msgService: MessageService) { 
+  constructor(private msgService: MessageService) {
   }
 
   ngOnInit() {
     this.messages = this.msgService.getMessages();
+    this.msgService.messageSent.subscribe(
+      (messages: Message[]) => { 
+        this.messages = messages 
+      }
+    );
   }
 
   onSendMessage(message: Message) {
