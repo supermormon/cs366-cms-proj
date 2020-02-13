@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { Document } from '../document.model';
+import { DocumentService } from '../document.service';
+import { Params, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'cms-document-detail',
@@ -7,11 +9,18 @@ import { Document } from '../document.model';
   styleUrls: ['./document-detail.component.css']
 })
 export class DocumentDetailComponent implements OnInit {
-  @Input() document: Document;
+  document: Document;
 
-  constructor() { }
+  constructor(private documentService: DocumentService,
+    private route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.route.params.subscribe((params: Params) => {
+      const id = params['id'];
+      if (id != null) {
+        this.document = this.documentService.getDocument(id);
+      }
+    })
   }
 
 }

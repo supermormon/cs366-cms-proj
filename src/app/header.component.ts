@@ -7,15 +7,11 @@ import { debugOutputAstAsTypeScript } from '@angular/compiler';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
-  @Output() featureSelected = new EventEmitter<string>();
+  collapsed: boolean = true;
 
   constructor() { }
 
   ngOnInit() {
-  }
-
-  onSelectFeature(feature: string) {
-    this.featureSelected.emit(feature);
   }
 
 }

@@ -8,7 +8,7 @@
       <cms-document-item
       *ngFor="let documentEl of documents"
       [document]="documentEl"
-      (click)="onSelectDocument(documentEl)"></cms-document-item>
+      [routerLink]="[documentEl.documentId]"></cms-document-item>
     </div>
   </div>
 </div>
