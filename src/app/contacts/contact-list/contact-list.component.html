@@ -7,7 +7,7 @@
     <cms-contact-item 
       *ngFor="let contactEl of contacts" 
       [contact]="contactEl"
-      (click)="onSelectContact(contactEl)">
+      [routerLink]="[contactEl.contactId]">
     </cms-contact-item>
   </div>
 </div>

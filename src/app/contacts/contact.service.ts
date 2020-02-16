@@ -10,7 +10,7 @@ import { convertActionBinding } from '@angular/compiler/src/compiler_util/expres
 })
 export class ContactService {
   contacts: Contact[] = [];
-  contactSelected = new EventEmitter<Contact>();
+  contactChangedEvent = new EventEmitter<Contact[]>();
 
   constructor() { 
     this.contacts = MOCKCONTACTS;
@@ -24,5 +24,12 @@ export class ContactService {
 
   getContacts(): Contact[] {
     return this.contacts.slice();
+  }
+
+  deleteContact(id: string) {
+    this.contacts = this.contacts.filter(contact => {
+      return contact.contactId !== id;
+    });
+    this.contactChangedEvent.emit(this.contacts.slice());
   }
 }
