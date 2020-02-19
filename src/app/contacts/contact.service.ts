@@ -1,7 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { Contact } from './contact.model';
 import { MOCKCONTACTS } from './MOCKCONTACTS';
-import { concat } from 'rxjs';
+import { concat, Subject } from 'rxjs';
 import { convertActionBinding } from '@angular/compiler/src/compiler_util/expression_converter';
 
 
@@ -10,10 +10,12 @@ import { convertActionBinding } from '@angular/compiler/src/compiler_util/expres
 })
 export class ContactService {
   contacts: Contact[] = [];
-  contactChangedEvent = new EventEmitter<Contact[]>();
+  contactChangedEvent = new Subject<Contact[]>();
+  maxId: number;
 
   constructor() { 
     this.contacts = MOCKCONTACTS;
+    this.maxId = this.getMaxId();
   }
 
   getContact(id: string): Contact {
@@ -30,6 +32,35 @@ export class ContactService {
     this.contacts = this.contacts.filter(contact => {
       return contact.contactId !== id;
     });
-    this.contactChangedEvent.emit(this.contacts.slice());
+    this.contactChangedEvent.next(this.contacts.slice());
+  }
+
+  addContact(newContact: Contact) {
+    if (newContact) {
+      this.maxId++;
+      newContact.contactId = this.maxId.toString();
+      this.contacts.push(newContact);
+      this.contactChangedEvent.next(this.contacts.slice());
+    }
+  }
+
+  updateContact(originalContact: Contact, newContact: Contact) {
+    if (originalContact && newContact) {
+      let pos = this.contacts.indexOf(originalContact);
+      if (pos >= 0) {
+        newContact.contactId = originalContact.contactId;
+        this.contacts[pos] = newContact;
+        this.contactChangedEvent.next(this.contacts.slice());
+      }
+    }
+  }
+
+  private getMaxId(): number {
+    let maxId = this.contacts.reduce((acc, curr): number => {
+      if (+curr.contactId > acc) {
+        return +curr.contactId;
+      }
+    }, 0);
+    return maxId;
   }
 }
