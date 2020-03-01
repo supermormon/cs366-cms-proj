@@ -11,6 +11,7 @@ import { ContactEditComponent } from './contacts/contact-edit/contact-edit.compo
 const routes: Routes = [
   { path: '', redirectTo: '/documents', pathMatch: 'full'},
   { path: 'documents', component: DocumentsComponent, children: [
+    { path: 'new', component: DocumentEditComponent },
     { path: ':id', component: DocumentDetailComponent },
     { path: ':id/edit', component: DocumentEditComponent }
   ]},

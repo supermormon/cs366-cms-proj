@@ -38,7 +38,7 @@ export class DocumentService {
     }
   }
 
-  addContact(newDocument: Document) {
+  addDocument(newDocument: Document) {
     if (newDocument) {
       this.maxId++;
       newDocument.documentId = this.maxId.toString();
@@ -47,7 +47,7 @@ export class DocumentService {
     }
   }
 
-  updateContact(originalDocument: Document, newDocument: Document) {
+  updateDocument(originalDocument: Document, newDocument: Document) {
     if (originalDocument && newDocument) {
       let pos = this.documents.indexOf(originalDocument);
       if (pos >= 0) {
