@@ -5,13 +5,16 @@
       [routerLink]="['new']">
       New Contact
     </button>
-    <h4>Conacts</h4>
+    <h4>Contacts</h4>
   </div>
   <div class="panel-body">
     <cms-contact-item 
       *ngFor="let contactEl of contacts" 
       [contact]="contactEl"
-      [routerLink]="[contactEl.contactId]">
+      dnd-draggable
+      [dragEnabled]="true"
+      [dragData]="contactEl"
+      [dropZones]="['contactGroup']">
     </cms-contact-item>
   </div>
 </div>

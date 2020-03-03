@@ -14,7 +14,7 @@ export class ContactEditComponent implements OnInit {
   @ViewChild('form', { static: false }) contactForm: NgForm;
   originalContact: Contact;
   contact: Contact = null;
-  groupContacts: Contact[] = null;
+  groupContacts: Contact[] = [];
   editMode: boolean = false;
   hasGroup: boolean = false;
 
@@ -83,7 +83,7 @@ export class ContactEditComponent implements OnInit {
     if (!newContact) {
       return true;
     }
-    if (newContact.contactId === this.contact.contactId) {
+    if (this.contact && newContact.contactId === this.contact.contactId) {
       return true;
     }
     for (let i = 0; i < this.groupContacts.length; i++) {

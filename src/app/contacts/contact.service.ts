@@ -2,8 +2,8 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { Contact } from './contact.model';
 import { MOCKCONTACTS } from './MOCKCONTACTS';
 import { concat, Subject } from 'rxjs';
-import { convertActionBinding } from '@angular/compiler/src/compiler_util/expression_converter';
-
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { MOCKDOCUMENTS } from '../documents/MOCKDOCUMENTS';
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +12,9 @@ export class ContactService {
   contacts: Contact[] = [];
   contactChangedEvent = new Subject<Contact[]>();
   maxId: number;
+  baseUrl = 'https://cit-366-dea88.firebaseio.com/';
 
-  constructor() { 
+  constructor(private http: HttpClient) {
     this.contacts = MOCKCONTACTS;
     this.maxId = this.getMaxId();
   }
@@ -24,8 +25,15 @@ export class ContactService {
     });
   }
 
-  getContacts(): Contact[] {
+  getContacts() {
     return this.contacts.slice();
+    // this.http.get<Contact[]>(
+    //   this.baseUrl + 'contacts.json')
+    //   .subscribe((contacts) => {
+    //     console.log(contacts);
+    //     this.contacts = contacts;
+    //     this.contactChangedEvent.next(this.contacts.slice());
+    //   });
   }
 
   deleteContact(id: string) {
@@ -36,12 +44,12 @@ export class ContactService {
   }
 
   addContact(newContact: Contact) {
-    if (newContact) {
-      this.maxId++;
-      newContact.contactId = this.maxId.toString();
-      this.contacts.push(newContact);
-      this.contactChangedEvent.next(this.contacts.slice());
-    }
+    // if (newContact) {
+    //   this.maxId++;
+    //   newContact.contactId = this.maxId.toString();
+    //   this.contacts.push(newContact);
+    //   this.contactChangedEvent.next(this.contacts.slice());
+    // }
   }
 
   updateContact(originalContact: Contact, newContact: Contact) {
@@ -62,5 +70,15 @@ export class ContactService {
       }
     }, 0);
     return maxId;
+  }
+
+  private storeContacts() {
+    let contacts = JSON.stringify(this.contacts)
+    const headers = new HttpHeaders({'Content-Type': 'application/json'});
+
+    this.http.put(this.baseUrl + 'contacts.json', contacts, {headers: headers})
+      .subscribe(res => {
+        console.log(res);
+      })
   }
 }
