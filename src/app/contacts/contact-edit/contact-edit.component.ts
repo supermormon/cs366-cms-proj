@@ -49,7 +49,7 @@ export class ContactEditComponent implements OnInit {
       this.contactForm.value.imageUrl,
       this.groupContacts
     )
-    
+
     if (this.editMode) {
       this.contactService.updateContact(this.originalContact, newContact);
     } else {
@@ -83,11 +83,11 @@ export class ContactEditComponent implements OnInit {
     if (!newContact) {
       return true;
     }
-    if (this.contact && newContact.contactId === this.contact.contactId) {
+    if (this.contact && newContact.id === this.contact.id) {
       return true;
     }
     for (let i = 0; i < this.groupContacts.length; i++) {
-      if (newContact.contactId === this.groupContacts[i].contactId) {
+      if (newContact.id === this.groupContacts[i].id) {
         return true;
       }
     }

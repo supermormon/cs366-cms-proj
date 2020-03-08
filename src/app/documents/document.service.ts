@@ -1,7 +1,9 @@
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { MOCKDOCUMENTS } from './MOCKDOCUMENTS';
 import { Document } from './document.model';
 import { Subject } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { ThrowStmt } from '@angular/compiler';
 
 @Injectable({
   providedIn: 'root'
@@ -11,39 +13,61 @@ export class DocumentService {
   documents: Document[] = [];
   documentChangedEvent = new Subject<Document[]>();
   maxId: number;
+  baseUrl = 'https://cit-366-dea88.firebaseio.com/';
 
-  constructor() {
-    this.documents = MOCKDOCUMENTS;
-    this.maxId = this.getMaxId();
+  constructor(private http: HttpClient) {
+    // this.documents = MOCKDOCUMENTS;
+    this.getDocuments();
+    console.log("got documents!");
   }
 
   getDocument(id: string) {
     if (id) {
       return this.documents.find(doc => {
-        return doc.documentId === id;
+        return doc.id === id;
       });
     }
   }
 
   getDocuments() {
-    return this.documents.slice();
+    this.http
+      .get<Document[]>(this.baseUrl + 'documents.json')
+      .subscribe(documents => {
+        this.documents = documents;
+        this.maxId = this.getMaxId();
+        console.log(this.maxId);
+        this.documents = this.documents.sort((d1, d2) => d1.name >= d2.name ? 1 : -1);
+        this.documentChangedEvent.next(this.documents.slice());
+      }, error => {
+        console.log(error);
+      });
+  }
+
+  private storeDocuments() {
+    this.http
+      .put(this.baseUrl + 'documents.json', this.documents)
+      .subscribe(res => {
+        this.maxId = this.getMaxId();
+        this.documentChangedEvent.next(this.documents);
+        console.log(res);
+      })
   }
 
   deleteDocument(id: string) {
     if (id) {
       this.documents = this.documents.filter(doc => {
-        return doc.documentId !== id;
+        return doc.id !== id;
       });
-      this.documentChangedEvent.next(this.documents.slice());
+      this.storeDocuments();
     }
   }
 
   addDocument(newDocument: Document) {
     if (newDocument) {
       this.maxId++;
-      newDocument.documentId = this.maxId.toString();
+      newDocument.id = this.maxId.toString();
       this.documents.push(newDocument);
-      this.documentChangedEvent.next(this.documents.slice());
+      this.storeDocuments();
     }
   }
 
@@ -51,19 +75,21 @@ export class DocumentService {
     if (originalDocument && newDocument) {
       let pos = this.documents.indexOf(originalDocument);
       if (pos >= 0) {
-        newDocument.documentId = originalDocument.documentId;
+        newDocument.id = originalDocument.id;
         this.documents[pos] = newDocument;
-        this.documentChangedEvent.next(this.documents.slice());
+        this.storeDocuments();
       }
     }
   }
 
   private getMaxId(): number {
-    let maxId = this.documents.reduce((acc, curr): number => {
-      if (+curr.documentId > acc) {
-        return +curr.documentId;
+    let maxId = 0; 
+
+    for (let i = 0; i < this.documents.length; i++) {
+      if (+this.documents[i].id > maxId) {
+        maxId = +this.documents[i].id;
       }
-    }, 0);
+    }
     return maxId;
   }
 }

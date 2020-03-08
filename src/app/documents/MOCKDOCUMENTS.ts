@@ -1,4 +1,4 @@
-import {Document} from './document.model';
+import { Document } from './document.model';
 
 export const MOCKDOCUMENTS: any[] = [
   {
@@ -53,18 +53,18 @@ export const MOCKDOCUMENTS: any[] = [
     name: 'CIT 460 - Enterprise Development',
     url: 'https://rkjackson.wordpress.com/',
     children: [
-      {documentId: '12', name: 'Case 1 – Defining the requirements', url: 'https://rkjackson.wordpress.com/cases/case-1/'},
-      {documentId: '13', name: 'Case 2 – User Interface design', url: 'https://rkjackson.wordpress.com/cases/case-2/'},
+      { documentId: '12', name: 'Case 1 – Defining the requirements', url: 'https://rkjackson.wordpress.com/cases/case-1/' },
+      { documentId: '13', name: 'Case 2 – User Interface design', url: 'https://rkjackson.wordpress.com/cases/case-2/' },
       {
         documentId: '14', name: 'Case 3 – Implementing Model Layer', url: 'https://rkjackson.wordpress.com/cases/case-3/',
         children: [
-          {'documentId': '36', name: 'Team Assignment', 'description': 'Create your first JavaBean class'}
-          , {'documentId': '37', name: 'IndivdocumentIdual Assignment', 'description': 'Create remaining JavaBean classes'}
+          { 'documentId': '36', name: 'Team Assignment', 'description': 'Create your first JavaBean class' }
+          , { 'documentId': '37', name: 'IndivdocumentIdual Assignment', 'description': 'Create remaining JavaBean classes' }
         ]
       },
-      {documentId: '15', name: 'Case 4 – Enterprise Java Session Beans', url: 'https://rkjackson.wordpress.com/cases/case-4/'},
-      {documentId: '16', name: 'Case 5 – Implementing the View', url: 'https://rkjackson.wordpress.com/cases/case-5/'},
-      {documentId: '17', name: 'Case 6 – A Framework for the View Layer', url: 'https://rkjackson.wordpress.com/cases/case-6/'}
+      { documentId: '15', name: 'Case 4 – Enterprise Java Session Beans', url: 'https://rkjackson.wordpress.com/cases/case-4/' },
+      { documentId: '16', name: 'Case 5 – Implementing the View', url: 'https://rkjackson.wordpress.com/cases/case-5/' },
+      { documentId: '17', name: 'Case 6 – A Framework for the View Layer', url: 'https://rkjackson.wordpress.com/cases/case-6/' }
     ]
   },
   {

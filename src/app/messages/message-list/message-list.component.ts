@@ -16,10 +16,10 @@ export class MessageListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.messages = this.msgService.getMessages();
+    this.msgService.getMessages();
     this.subscription = this.msgService.messageSent.subscribe(
-      (messages: Message[]) => { 
-        this.messages = messages 
+      (messages: Message[]) => {
+        this.messages = messages;
       }
     );
   }
@@ -29,7 +29,7 @@ export class MessageListComponent implements OnInit, OnDestroy {
   }
 
   onSendMessage(message: Message) {
-    this.messages.push(message);
+    this.msgService.addMessage(message);
   }
 
 }
