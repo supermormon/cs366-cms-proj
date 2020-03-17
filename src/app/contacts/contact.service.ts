@@ -4,6 +4,7 @@ import { MOCKCONTACTS } from './MOCKCONTACTS';
 import { concat, Subject } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MOCKDOCUMENTS } from '../documents/MOCKDOCUMENTS';
+import { ApiService } from '../api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,9 +13,11 @@ export class ContactService {
   contacts: Contact[] = [];
   contactChangedEvent = new Subject<Contact[]>();
   maxId: number;
-  baseUrl = 'https://cit-366-dea88.firebaseio.com/';
+  baseUri: string;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,
+    private apiService: ApiService) {
+    this.baseUri = apiService.getBaseUri();
     this.getContacts();
   }
 
@@ -26,7 +29,7 @@ export class ContactService {
 
   getContacts() {
     this.http.get<Contact[]>(
-      this.baseUrl + 'contacts.json')
+      this.baseUri + 'contacts.json')
       .subscribe((contacts) => {
         // console.log(contacts);
         console.log('contacts loaded')
@@ -74,7 +77,7 @@ export class ContactService {
       if (+curr.id > acc) {
         return +curr.id;
       }
-    }, 0);
+    }, 0);  
     return maxId;
   }
 
@@ -82,7 +85,7 @@ export class ContactService {
     let contacts = JSON.stringify(this.contacts)
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
-    this.http.put(this.baseUrl + 'contacts.json', contacts, { headers: headers })
+    this.http.put(this.baseUri + 'contacts.json', contacts, { headers: headers })
       .subscribe(res => {
         this.contactChangedEvent.next(this.contacts.slice());
       })

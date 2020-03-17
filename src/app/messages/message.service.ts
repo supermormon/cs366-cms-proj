@@ -1,8 +1,8 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { Message } from './message.model';
-import { MOCKMESSAGES } from './MOCKMESSAGES';
 import { Subject } from 'rxjs';
 import { HttpHeaders, HttpClient, HttpResponse } from '@angular/common/http';
+import { ApiService } from '../api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,9 +11,11 @@ export class MessageService {
   messageSent = new Subject<Message[]>();
   messages: Message[] = [];
   maxId: number;
-  baseUrl = 'https://cit-366-dea88.firebaseio.com/';
+  baseUri: string;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,
+    private apiService: ApiService) {
+    this.baseUri = apiService.getBaseUri();
     this.getMessages();
   }
 
@@ -27,7 +29,7 @@ export class MessageService {
 
   getMessages() {
     this.http.get<Message[]>(
-      this.baseUrl + 'messages.json')
+      this.baseUri + 'messages.json')
       .subscribe((messages) => {
         this.messages = messages;
         this.maxId = this.getMaxId();
@@ -37,7 +39,7 @@ export class MessageService {
 
   private storeMessages() {
     this.http
-      .put(this.baseUrl + 'messages.json', this.messages)
+      .put(this.baseUri + 'messages.json', this.messages)
       .subscribe(res => {
         this.messageSent.next(this.messages.slice());
         console.log(res);

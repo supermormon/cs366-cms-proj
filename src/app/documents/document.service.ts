@@ -1,24 +1,23 @@
 import { Injectable } from '@angular/core';
-import { MOCKDOCUMENTS } from './MOCKDOCUMENTS';
 import { Document } from './document.model';
 import { Subject } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ThrowStmt } from '@angular/compiler';
+import { ApiService } from '../api.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DocumentService {
-  // documentSelected = new EventEmitter<Document>();
   documents: Document[] = [];
   documentChangedEvent = new Subject<Document[]>();
   maxId: number;
-  baseUrl = 'https://cit-366-dea88.firebaseio.com/';
+  baseUri: string;
 
-  constructor(private http: HttpClient) {
-    // this.documents = MOCKDOCUMENTS;
+  constructor(private http: HttpClient,
+    private apiService: ApiService) {
+    this.baseUri = apiService.getBaseUri();
     this.getDocuments();
-    console.log("got documents!");
   }
 
   getDocument(id: string) {
@@ -31,7 +30,7 @@ export class DocumentService {
 
   getDocuments() {
     this.http
-      .get<Document[]>(this.baseUrl + 'documents.json')
+      .get<Document[]>(this.baseUri + 'documents')
       .subscribe(documents => {
         this.documents = documents;
         this.maxId = this.getMaxId();
@@ -45,7 +44,7 @@ export class DocumentService {
 
   private storeDocuments() {
     this.http
-      .put(this.baseUrl + 'documents.json', this.documents)
+      .put(this.baseUri + 'documents.json', this.documents)
       .subscribe(res => {
         this.maxId = this.getMaxId();
         this.documentChangedEvent.next(this.documents);
