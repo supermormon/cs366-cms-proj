@@ -8,14 +8,14 @@ const {
 const express = require('express');
 const router = express.Router();
 
-router.get('/api/documents', getDocuments);
+router.get('/', getDocuments);
 
-router.get('/api/documents/:id', getDocument);
+router.get('/:id', getDocument);
 
-router.post('/api/documents', createDocument);
+router.post('/', createDocument);
 
-router.put('/api/documents/:id', updateDocument);
+router.put('/:id', updateDocument);
 
-router.delete('/api/documents/:id', deleteDocument);
+router.delete('/:id', deleteDocument);
 
 module.exports = router;

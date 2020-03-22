@@ -8,15 +8,15 @@ const {
 const express = require('express');
 const router = express.Router();
 
-router.get('/api/contacts', getContacts);
+router.get('/', getContacts);
 
-router.get('/api/contacts/:id', getContact);
+router.get('/:id', getContact);
 
-router.post('/api/contacts', createContact);
+router.post('/', createContact);
 
-router.put('/api/contacts/:id', updateContact);
+router.put('/:id', updateContact);
 
-router.delete('/api/contacts/:id', deleteContact);
+router.delete('/:id', deleteContact);
 
 module.exports = router;
 

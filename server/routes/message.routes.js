@@ -8,14 +8,14 @@ const {
 const express = require('express');
 const router = express.Router();
 
-router.get('/api/messages', getMessages);
+router.get('/', getMessages);
 
-router.get('/api/messages/:id', getMessage);
+router.get('/:id', getMessage);
 
-router.post('/api/messages', createMessage);
+router.post('/', createMessage);
 
-router.put('/api/messages/:id', updateMessage);
+router.put('/:id', updateMessage);
 
-router.delete('/api/messages/:id', deleteMessage);
+router.delete('/:id', deleteMessage);
 
 module.exports = router;

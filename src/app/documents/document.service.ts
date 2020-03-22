@@ -11,8 +11,8 @@ import { ApiService } from '../api.service';
 export class DocumentService {
   documents: Document[] = [];
   documentChangedEvent = new Subject<Document[]>();
-  maxId: number;
   baseUri: string;
+  endpoint = 'documents';
 
   constructor(private http: HttpClient,
     private apiService: ApiService) {
@@ -30,11 +30,9 @@ export class DocumentService {
 
   getDocuments() {
     this.http
-      .get<Document[]>(this.baseUri + 'documents')
+      .get<Document[]>(this.baseUri + this.endpoint)
       .subscribe(documents => {
         this.documents = documents;
-        this.maxId = this.getMaxId();
-        console.log(this.maxId);
         this.documents = this.documents.sort((d1, d2) => d1.name >= d2.name ? 1 : -1);
         this.documentChangedEvent.next(this.documents.slice());
       }, error => {
@@ -42,53 +40,35 @@ export class DocumentService {
       });
   }
 
-  private storeDocuments() {
-    this.http
-      .put(this.baseUri + 'documents.json', this.documents)
-      .subscribe(res => {
-        this.maxId = this.getMaxId();
-        this.documentChangedEvent.next(this.documents);
-        console.log(res);
-      })
-  }
-
   deleteDocument(id: string) {
     if (id) {
-      this.documents = this.documents.filter(doc => {
-        return doc.id !== id;
-      });
-      this.storeDocuments();
+      this.http
+        .delete(this.baseUri + `${this.endpoint}/${id}`)
+        .subscribe(() => {
+          this.getDocuments();
+        });
     }
   }
 
   addDocument(newDocument: Document) {
     if (newDocument) {
-      this.maxId++;
-      newDocument.id = this.maxId.toString();
-      this.documents.push(newDocument);
-      this.storeDocuments();
+      this.http
+        .post<Document[]>(this.baseUri + this.endpoint, newDocument)
+        .subscribe(documents => {
+          this.documents = documents;
+          this.documentChangedEvent.next(this.documents.slice());
+        })
     }
   }
 
   updateDocument(originalDocument: Document, newDocument: Document) {
     if (originalDocument && newDocument) {
-      let pos = this.documents.indexOf(originalDocument);
-      if (pos >= 0) {
-        newDocument.id = originalDocument.id;
-        this.documents[pos] = newDocument;
-        this.storeDocuments();
-      }
+      this.http
+        .put(this.baseUri + `${this.endpoint}/${originalDocument.id}`, newDocument)
+        .subscribe(() => {
+          this.getDocuments();
+        })
     }
   }
 
-  private getMaxId(): number {
-    let maxId = 0; 
-
-    for (let i = 0; i < this.documents.length; i++) {
-      if (+this.documents[i].id > maxId) {
-        maxId = +this.documents[i].id;
-      }
-    }
-    return maxId;
-  }
 }

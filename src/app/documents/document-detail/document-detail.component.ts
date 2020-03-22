@@ -25,8 +25,12 @@ export class DocumentDetailComponent implements OnInit {
       const id = params['id'];
       if (id != null) {
         this.document = this.documentService.getDocument(id);
+        this.documentService.documentChangedEvent.subscribe((documents) => {
+          this.document = this.documentService.getDocument(id);
+        })
       }
     })
+
   }
 
   onView() {

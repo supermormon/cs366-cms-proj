@@ -1,6 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { Message } from './message.model';
 import { Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { HttpHeaders, HttpClient, HttpResponse } from '@angular/common/http';
 import { ApiService } from '../api.service';
 
@@ -12,6 +13,7 @@ export class MessageService {
   messages: Message[] = [];
   maxId: number;
   baseUri: string;
+  endpoint = 'messages';
 
   constructor(private http: HttpClient,
     private apiService: ApiService) {
@@ -29,34 +31,22 @@ export class MessageService {
 
   getMessages() {
     this.http.get<Message[]>(
-      this.baseUri + 'messages.json')
+      this.baseUri + this.endpoint)
       .subscribe((messages) => {
         this.messages = messages;
-        this.maxId = this.getMaxId();
         this.messageSent.next(this.messages.slice());
+        console.log(this.messages);
       });
   }
 
-  private storeMessages() {
-    this.http
-      .put(this.baseUri + 'messages.json', this.messages)
-      .subscribe(res => {
-        this.messageSent.next(this.messages.slice());
-        console.log(res);
-      })
-  }
-
   addMessage(message: Message) {
-    this.messages.push(message);
-    this.storeMessages();
-  }
-
-  private getMaxId(): number {
-    let maxId = this.messages.reduce((acc, curr): number => {
-      if (+curr.id > acc) {
-        return +curr.id;
-      }
-    }, 0);
-    return maxId;
+    this.http
+      .post<Message[]>(this.baseUri + this.endpoint, message)
+      .subscribe((messages) => {
+        if (messages) {
+          this.messages = messages;
+          this.messageSent.next(this.messages);
+        }
+      })
   }
 }

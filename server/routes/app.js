@@ -18,14 +18,14 @@ app.use((req, res, next) => {
   );
   res.setHeader(
     "Access-Control-Allow-Methods", 
-    "GET, POST, PATCH, DELETE, OPTIONS"
+    "GET, PUT, POST, PATCH, DELETE, OPTIONS"
   );
   next();
 });
 
 app
-  .use(contactRoutes)
-  .use(documentRoutes)
-  .use(messageRoutes);
+  .use('/api/contacts', contactRoutes)
+  .use('/api/documents', documentRoutes)
+  .use('/api/messages', messageRoutes);
 
 module.exports = app;

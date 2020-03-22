@@ -37,7 +37,7 @@ export class DocumentEditComponent implements OnInit {
 
   onSubmit() {
     let newDocument = new Document(
-      this.documentService.maxId.toString(),
+      "0",
       this.docForm.value.name,
       this.docForm.value.description,
       this.docForm.value.url,

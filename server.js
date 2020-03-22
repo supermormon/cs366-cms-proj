@@ -14,8 +14,14 @@ var index = require('./server/routes/app');
 // establish a connection to the mongo database
 // *** Important *** change yourPort and yourDatabase
 //     to those used by your database
-
-mongoose.connect('mongodb://localhost:27017/cms');
+mongoose
+  .set('useFindAndModify', false)
+  .connect('mongodb://localhost:27017/cms', { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(console.log('Connected to the database'))
+  .catch((err) => {
+    console.log(err);
+    console.log('Failed to connect to database');
+  });
 
 var app = express(); // create an instance of express
 
